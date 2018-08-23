@@ -1,0 +1,39 @@
+{
+  "name": "google-blogger",
+  "version": "0.0.1",
+  "description": "project using the google blogger api to access data",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sebknight/google-blogger.git"
+  },
+  "keywords": [
+    "blogger",
+    "node",
+    "json",
+    "grunt",
+    "npm"
+  ],
+  "author": "sebastian maddox, tashina jacobs, quentin mccarthy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sebknight/google-blogger/issues"
+  },
+  "homepage": "https://github.com/sebknight/google-blogger#readme",
+  "dependencies": {
+    "bootstrap": "^4.1.3",
+    "express": "^4.16.3",
+    "jquery": "^3.3.1",
+    "popper.js": "^1.14.4"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.3",
+    "grunt-contrib-cssmin": "^2.2.1",
+    "grunt-contrib-jshint": "^1.1.0",
+    "grunt-contrib-uglify": "^3.4.0",
+    "grunt-contrib-watch": "^1.1.0"
+  }
+}
