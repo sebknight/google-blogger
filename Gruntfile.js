@@ -24,7 +24,7 @@ module.exports = function(grunt){
 		watch: {
 			css: {
 				files: ["public/css/style.css"],
-				tasks: ["csslint", "cssmin"]
+				tasks: ["cssmin"]
 			},
 			js: {
 				files: ["public/js/script.js"],
