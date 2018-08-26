@@ -6,4 +6,20 @@
 
 body {
 	padding: 10px;
+	background-color: ;
+}
+
+h1{
+	color: #f06d06;
+	text-align: center;
+	font-size: 100px;
+	font-family: Times;
+}
+
+h2{
+	text-align: center;
+}
+
+.w3-container{
+	border: 2px solid;
 }
