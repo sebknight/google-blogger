@@ -34,10 +34,19 @@ app.set(`port`, (process.env.PORT || 3000));
 
 app.listen(app.get(`port`), () => console.log(`Server is running on port ${app.get(`port`)}`));
 
-blogger.blogs.get(params, function(err, res){
-	if(err){
-		console.error(err);
-		throw err;
-	}
-	console.log((`The blog url is ${res.data.url}`));
-});
+// This type of call to the blogger API does not seem to work.
+// blogger.blogs.get(params, function(err, res){
+// 	if(err){
+// 		console.error(err);
+// 		throw err;
+// 	}
+// 	console.log((`The blog url is ${res.data.url}`));
+// });
+
+blogger.blogs.get(params)
+	.then((res) =>{
+		console.log(`The blog url is ${res.data.url}`);
+	})
+	.catch(error => {
+		console.log(error);
+	});
