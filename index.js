@@ -45,9 +45,17 @@ app.listen(app.get(`port`), () => {
 // 	console.log((`The blog url is ${res.data.url}`));
 // });
 
-blogger.blogs.get(params)
+// blogger.blogs.get(params)
+// 	.then((res) =>{
+// 		console.log(`The blog url is ${res.data.url}`);
+// 	})
+// 	.catch(error => {
+// 		console.log(error);
+// 	});
+
+blogger.posts.list(params)
 	.then((res) =>{
-		console.log(`The blog url is ${res.data.url}`);
+		console.log(`First Post Title: ${res.data.items[0].title}`);
 	})
 	.catch(error => {
 		console.log(error);
