@@ -2,15 +2,17 @@ const express = require("express");
 const path = require("path");
 const config = require("./config");
 const {google} = require("googleapis");
-const blogger = google.blogger({
-	version: 'v3',
-	auth: config.bloggerKey
-});
-const params = {
-	blogID: 4236176886935208807
-};
 
 const app = express();
+
+const blogger = google.blogger({
+	version: `v3`,
+	auth: config.bloggerKey
+});
+
+const params = {
+	blogId: 4236176886935208807
+};
 
 app.use(function(req, res, next){
 	console.log(`${req.method} request for ${req.url}`);
@@ -32,11 +34,10 @@ app.set(`port`, (process.env.PORT || 3000));
 
 app.listen(app.get(`port`), () => console.log(`Server is running on port ${app.get(`port`)}`));
 
-blogger.blogs.get(params, (err, res) => {
-	if (err) {
+blogger.blogs.get(params, function(err, res){
+	if(err){
 		console.error(err);
 		throw err;
 	}
 	console.log((`The blog url is ${res.data.url}`));
-	
 });
