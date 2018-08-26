@@ -11,7 +11,7 @@ const blogger = google.blogger({
 });
 
 const params = {
-	blogId: 4236176886935208807
+	blogId: 3247312780602173037
 };
 
 app.use(function(req, res, next){
