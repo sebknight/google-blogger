@@ -1,6 +1,7 @@
 // Module requirements
 const express = require("express");
 const path = require("path");
+const fs = require("fs");
 
 // File calls
 const config = require("./config");
@@ -10,6 +11,26 @@ const {google} = require("googleapis");
 
 // Initialisation of above (where necessary)
 const app = express();
+// Initialisation of body parser - note this needs to be installed via npm (see package)
+const bodyParser = require('body-parser');
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({
+	extended: true
+})); // support encoded bodies
+
+var searchQuery;
+// Use function echoes requests to the server.
+app.use(function(req, res, next){
+	console.log(`${req.method} request for ${req.url}`);
+	next();
+});
+
+// Call for static files in public (i.e. images)
+app.use(express.static(`./public`));
+
+// Calls for Bootstrap and jQuery. Required as files inside ./public cannot exit public
+app.use(`/bootstrap`, express.static(path.join(__dirname, `node_modules/bootstrap/dist`)));
+app.use(`/jquery`, express.static(path.join(__dirname, `node_modules/jquery/dist/jquery.min.js`)));
 
 // Blogger API call from googleapis package.
 // Calling for latest version "3"
@@ -22,27 +43,33 @@ const blogger = google.blogger({
 // Parameters for the GET request on the Blogger API
 // BlogId relates to the blog we're calling data from.
 const params = {
-	blogId: `4236176886935208807`
+	blogId: `4236176886935208807`,
+	q: searchQuery,
+	// Doesn't fetch body content of posts (to save data during testing)
+	fetchBodies: false,
 };
 
-// Use function echoes requests to the server.
-app.use(function(req, res, next){
-	console.log(`${req.method} request for ${req.url}`);
-	next();
-});
-
-// Call for static files in public (i.e. images)
-app.use(express.static(`./public`));
-
-// Calls for Boostrap and jQuery. Required as files inside ./public cannot exit public
-app.use(`/bootstrap`, express.static(path.join(__dirname, `node_modules/bootstrap/dist`)));
-app.use(`/jquery`, express.static(path.join(__dirname, `node_modules/jquery/dist/jquery.min.js`)));
-
-// GET request handling for "/" i.e. home.
 app.get(`/`, (req, res) => res.sendFile(`${__dirname}/public/index.html`));
-// app.get(`/`, function(req,res){
-// 	res.sendFile(`${__dirname}/public/index.html`);
-// });
+
+//POST request on form submit
+app.post('/formSubmit', function(req, res){
+	console.log("inside form post");
+	console.log(req.body.title);
+	// This is probably not a great way of defining this variable, for infosec reasons
+	searchQuery = req.body.title;
+	// This is the GET request for the blogger API
+	blogger.posts.list(params)
+		.then((res) => {
+			//Log searchQuery
+			console.log(searchQuery);
+			// Log the first blog post
+			// Doing this to avoid the console being filled with JSON data.
+			console.log(res.data.items[0]);
+		})
+		.catch(error => {
+			console.log(error);
+		})	;
+});
 
 // Setup port handling
 app.set(`port`, (process.env.PORT || 3000));
@@ -52,22 +79,4 @@ app.listen(app.get(`port`), () => {
 	console.log(`Server is running on port ${app.get(`port`)}`);
 });
 
-// GET request calls for blog URL from BlogId using Blogger API
-// blogger.blogs.get(params)
-// 	.then((res) =>{
-// 		console.log(`The blog url is ${res.data.url}`);
-// 	})
-// 	.catch(error => {
-// 		console.log(error);
-// 	});
 
-// GET request calls for blog posts from BlogId using Blogger API
-blogger.posts.list(params)
-	.then((res) =>{
-		// Log the first blog post's title.
-		// Doing this to avoid the console being filled with JSON data.
-		console.log(`First Post Title: ${res.data.items[0].title}`);
-	})
-	.catch(error => {
-		console.log(error);
-	});
