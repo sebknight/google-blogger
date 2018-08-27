@@ -39,7 +39,7 @@ app.use(`/bootstrap`, express.static(path.join(__dirname, `node_modules/bootstra
 app.use(`/jquery`, express.static(path.join(__dirname, `node_modules/jquery/dist/jquery.min.js`)));
 
 // GET request handling for "/" i.e. home.
-app.get(`/`, (req, res) => res.sendFile(`${__dirname}/public/index.html`));
+app.get(`/`, (req, res) => res.sendFile(`${__dirname}/public/home.html`));
 // app.get(`/`, function(req,res){
 // 	res.sendFile(`${__dirname}/public/index.html`);
 // });
