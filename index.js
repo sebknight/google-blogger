@@ -54,9 +54,12 @@ app.get(`/`, (req, res) => res.sendFile(`${__dirname}/public/index.html`));
 //POST request on form submit
 app.post('/formSubmit', function(req, res){
 	console.log("inside form post");
-	console.log(req.body.title);
-	// This is probably not a great way of defining this variable, for infosec reasons
+	// This is part of body parser (sending response)
+	res.send(req.body.title);
+	// Define searchQuery (there's probably a better way of doing this from an infosec perspective)
 	searchQuery = req.body.title;
+	console.log(searchQuery);
+
 	// This is the GET request for the blogger API
 	blogger.posts.list(params)
 		.then((res) => {
