@@ -1,6 +1,7 @@
 // Module requirements
 const express = require("express");
 const path = require("path");
+const fs = require("fs");
 
 // File calls
 const config = require("./config");
@@ -25,6 +26,9 @@ const params = {
 	blogId: `4236176886935208807`
 };
 
+// File path for the folder wherein data should be put
+const filePath = `./data`
+
 // Use function echoes requests to the server.
 app.use(function(req, res, next){
 	console.log(`${req.method} request for ${req.url}`);
@@ -39,16 +43,17 @@ app.use(`/bootstrap`, express.static(path.join(__dirname, `node_modules/bootstra
 app.use(`/jquery`, express.static(path.join(__dirname, `node_modules/jquery/dist/jquery.min.js`)));
 
 // GET request handling for "/" i.e. home.
-app.get(`/`, (req, res) => res.sendFile(`${__dirname}/public/index.html`));
-// app.get(`/`, function(req,res){
-// 	res.sendFile(`${__dirname}/public/index.html`);
-// });
+app.get(`/`, function(req, res){
+	console.log("Get /");
+	getPostsData(res);
+});
 
 // Setup port handling
 app.set(`port`, (process.env.PORT || 3000));
 
 // Echo server port is running on.
 app.listen(app.get(`port`), () => {
+	// `x1b[42m]%s\x1b[0m]` sets the text background color to green, and then resets to normal colours afterwards.
 	console.log(`\x1b[42m%s\x1b[0m`, `Server is running on port ${app.get(`port`)}`);
 });
 
@@ -62,12 +67,25 @@ app.listen(app.get(`port`), () => {
 // 	});
 
 // GET request calls for blog posts from BlogId using Blogger API
-blogger.posts.list(params)
-	.then((res) =>{
-		// Log the first blog post's title.
-		// Doing this to avoid the console being filled with JSON data.
-		console.log(`First Post Title: ${res.data.items[0].title}`);
-	})
-	.catch(error => {
-		console.log(error);
-	});
+function getPostsData(callRes){
+	blogger.posts.list(params)
+		.then((res) =>{
+			// Log the first blog post's title.
+			// Doing this to avoid the console being filled with JSON data.
+			// console.log(`First Post Title: ${res.data.items[0].title}`);
+
+			// Write the returned JSON data into the posts.json file
+			fs.writeFile(`${filePath}/posts.json`, res.data, function(err){
+				if(err){
+					console.log("Error");
+					console.log(err);
+				} else{
+					// Only display the page once the data has been given
+					callRes.sendFile(`${__dirname}/public/home.html`);
+				};
+			});
+		})
+		.catch(error => {
+			console.log(error);
+		});
+}
