@@ -49,7 +49,7 @@ app.set(`port`, (process.env.PORT || 3000));
 
 // Echo server port is running on.
 app.listen(app.get(`port`), () => {
-	console.log(`Server is running on port ${app.get(`port`)}`);
+	console.log(`\x1b[42m%s\x1b[0m`, `Server is running on port ${app.get(`port`)}`);
 });
 
 // GET request calls for blog URL from BlogId using Blogger API
