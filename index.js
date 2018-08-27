@@ -11,7 +11,7 @@ const blogger = google.blogger({
 });
 
 const params = {
-	blogId: 3247312780602173037
+	blogId: `4236176886935208807`
 };
 
 app.use(function(req, res, next){
@@ -32,7 +32,9 @@ app.get(`/`, (req, res) => res.sendFile(`${__dirname}/public/index.html`));
 
 app.set(`port`, (process.env.PORT || 3000));
 
-app.listen(app.get(`port`), () => console.log(`Server is running on port ${app.get(`port`)}`));
+app.listen(app.get(`port`), () => {
+	console.log(`Server is running on port ${app.get(`port`)}`);
+});
 
 // This type of call to the blogger API does not seem to work.
 // blogger.blogs.get(params, function(err, res){
@@ -43,9 +45,17 @@ app.listen(app.get(`port`), () => console.log(`Server is running on port ${app.g
 // 	console.log((`The blog url is ${res.data.url}`));
 // });
 
-blogger.blogs.get(params)
+// blogger.blogs.get(params)
+// 	.then((res) =>{
+// 		console.log(`The blog url is ${res.data.url}`);
+// 	})
+// 	.catch(error => {
+// 		console.log(error);
+// 	});
+
+blogger.posts.list(params)
 	.then((res) =>{
-		console.log(`The blog url is ${res.data.url}`);
+		console.log(`First Post Title: ${res.data.items[0].title}`);
 	})
 	.catch(error => {
 		console.log(error);
