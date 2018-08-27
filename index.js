@@ -41,10 +41,10 @@ app.use(express.static(`./public`));
 // Calls for Boostrap and jQuery. Required as files inside ./public cannot exit public
 app.use(`/bootstrap`, express.static(path.join(__dirname, `node_modules/bootstrap/dist`)));
 app.use(`/jquery`, express.static(path.join(__dirname, `node_modules/jquery/dist/jquery.min.js`)));
+app.use(`/posts`, express.static(`data/posts.json`));
 
 // GET request handling for "/" i.e. home.
 app.get(`/`, function(req, res){
-	console.log("Get /");
 	getPostsData(res);
 });
 
@@ -75,7 +75,7 @@ function getPostsData(callRes){
 			// console.log(`First Post Title: ${res.data.items[0].title}`);
 
 			// Write the returned JSON data into the posts.json file
-			fs.writeFile(`${filePath}/posts.json`, res.data, function(err){
+			fs.writeFile(`${filePath}/posts.json`, JSON.stringify(res.data), function(err){
 				if(err){
 					console.log("Error");
 					console.log(err);
