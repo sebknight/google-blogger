@@ -1,7 +1,6 @@
 // Module requirements
 const express = require("express");
 const path = require("path");
-const fs = require("fs");
 
 // File calls
 const config = require("./config");
@@ -26,9 +25,6 @@ const params = {
 	blogId: `4236176886935208807`
 };
 
-// File path for the folder wherein data should be put
-const filePath = `./data`
-
 // Use function echoes requests to the server.
 app.use(function(req, res, next){
 	console.log(`${req.method} request for ${req.url}`);
@@ -41,12 +37,12 @@ app.use(express.static(`./public`));
 // Calls for Boostrap and jQuery. Required as files inside ./public cannot exit public
 app.use(`/bootstrap`, express.static(path.join(__dirname, `node_modules/bootstrap/dist`)));
 app.use(`/jquery`, express.static(path.join(__dirname, `node_modules/jquery/dist/jquery.min.js`)));
-app.use(`/posts`, express.static(`data/posts.json`));
 
 // GET request handling for "/" i.e. home.
-app.get(`/`, function(req, res){
-	getPostsData(res);
-});
+app.get(`/`, (req, res) => res.sendFile(`${__dirname}/public/index.html`));
+// app.get(`/`, function(req,res){
+// 	res.sendFile(`${__dirname}/public/index.html`);
+// });
 
 // Setup port handling
 app.set(`port`, (process.env.PORT || 3000));
@@ -67,25 +63,12 @@ app.listen(app.get(`port`), () => {
 // 	});
 
 // GET request calls for blog posts from BlogId using Blogger API
-function getPostsData(callRes){
-	blogger.posts.list(params)
-		.then((res) =>{
-			// Log the first blog post's title.
-			// Doing this to avoid the console being filled with JSON data.
-			// console.log(`First Post Title: ${res.data.items[0].title}`);
-
-			// Write the returned JSON data into the posts.json file
-			fs.writeFile(`${filePath}/posts.json`, JSON.stringify(res.data), function(err){
-				if(err){
-					console.log("Error");
-					console.log(err);
-				} else{
-					// Only display the page once the data has been given
-					callRes.sendFile(`${__dirname}/public/home.html`);
-				};
-			});
-		})
-		.catch(error => {
-			console.log(error);
-		});
-}
+blogger.posts.list(params)
+	.then((res) =>{
+		// Log the first blog post's title.
+		// Doing this to avoid the console being filled with JSON data.
+		console.log(`First Post Title: ${res.data.items[0].title}`);
+	})
+	.catch(error => {
+		console.log(error);
+	});
