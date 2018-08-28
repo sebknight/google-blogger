@@ -14,12 +14,42 @@ h1{
 	text-align: center;
 	font-size: 100px;
 	font-family: Times;
+	margin-top: 30px;
+}
+
+h6{
+	color: #6c757d;
 }
 
 h2{
 	text-align: center;
+	margin: 60px 0 30px 0;
+	color: #6c757d;
+}
+
+#search-form{
+	text-align: center;
+	margin: 30px;
+}
+
+#search-input{
+	border-radius: 5px;
+	padding: 5px 10px;
+	border: 2px solid teal;
+	text-align: center;
+}
+
+#search-button{
+	border-radius: 5px;
+	padding: 5px 10px;
+	border: 2px solid teal;
 }
 
 .w3-container{
-	border: 2px solid;
+	/* margin: T R B L
+	margin: TB RL */
+	margin: 40px 280px 0 280px;
+	padding: 80px;
+	border: 2px solid #f06d06;
+	border-radius: 5px;
 }
