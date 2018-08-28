@@ -34,8 +34,7 @@ app.use(function(req, res, next){
 // Call for static files in public (i.e. images)
 app.use(express.static(`./public`));
 
-// Calls for Boostrap and jQuery. Required as files inside ./public cannot exit public
-app.use(`/bootstrap`, express.static(path.join(__dirname, `node_modules/bootstrap/dist`)));
+// Call for jQuery. Required as files inside ./public cannot exit ./public
 app.use(`/jquery`, express.static(path.join(__dirname, `node_modules/jquery/dist/jquery.min.js`)));
 
 // GET request handling for "/" i.e. home.
