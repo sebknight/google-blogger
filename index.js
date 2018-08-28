@@ -59,6 +59,9 @@ app.post('/formSubmit', function(req, res){
 		.catch(error => {
 			console.log(error);
 		});
+
+	res.writeHead(302, {"Location": "/"});
+	res.end();
 });
 
 // GET request handling for "/" i.e. home.
