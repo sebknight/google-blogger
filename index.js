@@ -39,12 +39,12 @@ const blogger = google.blogger({
 	auth: config.bloggerKey
 });
 
-app.get(`/`, (req, res) => res.sendFile(`${__dirname}/public/index.html`));
+app.get(`/`, (req, res) => res.sendFile(`${__dirname}/public/home.html`));
 
 //POST request on form submit
 app.post('/formSubmit', function(req, res){
 	// Defines searchQuery based on the user input (there's probably a better way of doing this from an infosec perspective)
-	searchQuery = req.body.title;
+	searchQuery = req.body.query;
 	//Calls search blog function
 	searchBlog();
 });
