@@ -39,7 +39,7 @@ app.use(`/bootstrap`, express.static(path.join(__dirname, `node_modules/bootstra
 app.use(`/jquery`, express.static(path.join(__dirname, `node_modules/jquery/dist/jquery.min.js`)));
 
 // GET request handling for "/" i.e. home.
-app.get(`/`, (req, res) => res.sendFile(`${__dirname}/public/index.html`));
+app.get(`/`, (req, res) => res.sendFile(`${__dirname}/public/home.html`));
 // app.get(`/`, function(req,res){
 // 	res.sendFile(`${__dirname}/public/index.html`);
 // });
@@ -49,7 +49,8 @@ app.set(`port`, (process.env.PORT || 3000));
 
 // Echo server port is running on.
 app.listen(app.get(`port`), () => {
-	console.log(`Server is running on port ${app.get(`port`)}`);
+	// `x1b[42m]%s\x1b[0m]` sets the text background color to green, and then resets to normal colours afterwards.
+	console.log(`\x1b[42m%s\x1b[0m`, `Server is running on port ${app.get(`port`)}`);
 });
 
 // GET request calls for blog URL from BlogId using Blogger API
