@@ -1,6 +1,7 @@
 // Module requirements
 const express = require("express");
 const path = require("path");
+const bodyParser = require('body-parser');
 
 // File calls
 const config = require("./config");
@@ -11,12 +12,9 @@ const {google} = require("googleapis");
 // Initialisation of above (where necessary)
 const app = express();
 
-// Initialisation of body parser - note this needs to be installed via npm (see package)
-const bodyParser = require('body-parser');
+// Body Parser Initialisation
 app.use(bodyParser.json()); // support json encoded bodies
-app.use(bodyParser.urlencoded({
-	extended: true
-})); // support url encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support url encoded bodies
 
 // The use function echoes requests to the server
 app.use(function(req, res, next){
@@ -38,28 +36,22 @@ const blogger = google.blogger({
 	auth: config.bloggerKey
 });
 
-app.get(`/`, (req, res) => res.sendFile(`${__dirname}/public/home.html`));
-
-//POST request on form submit
+// POST request on form submit
 app.post('/formSubmit', function(req, res){
-	// Defines searchQuery based on the user input (there's probably a better way of doing this from an infosec perspective)
-	searchQuery = req.body.query;
-	//Calls search blog function
-	searchBlog();
-});
+	// Define parameters of GET request
+	let params = {
+		blogId: `4236176886935208807`,
+		q: req.body.query,
+		// Doesn't fetch body content of posts (to save data during testing)
+		fetchBodies: false,
+	}
 
-// This is the GET request for the blogger API
-function searchBlog() {
-	blogger.posts.search({
-		//This object contains the search parameters
-				blogId: `4236176886935208807`,
-				q: searchQuery,
-				// Doesn't fetch body content of posts (to save data during testing)
-				fetchBodies: false,
-			})
+	// Call for data with provided filter from search Query.
+	// (There's probably a better way of doing this from an infosec perspective)
+	blogger.posts.search(params)
 		.then((res) => {
-			//Log searchQuery
-			console.log(searchQuery);
+			// console.log(searchQuery);
+
 			// Log the first blog post
 			// Doing this to avoid the console being filled with JSON data.
 			console.log(res.data.items[0]);
@@ -67,7 +59,7 @@ function searchBlog() {
 		.catch(error => {
 			console.log(error);
 		});
-	}
+});
 
 // GET request handling for "/" i.e. home.
 app.get(`/`, (req, res) => res.sendFile(`${__dirname}/public/home.html`));
