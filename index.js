@@ -43,7 +43,6 @@ app.get(`/`, (req, res) => res.sendFile(`${__dirname}/public/index.html`));
 
 //POST request on form submit
 app.post('/formSubmit', function(req, res){
-	console.log("inside form post");
 	// Defines searchQuery based on the user input (there's probably a better way of doing this from an infosec perspective)
 	searchQuery = req.body.title;
 	//Calls search blog function
